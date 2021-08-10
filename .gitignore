@@ -11,8 +11,8 @@
 # production
 /build
 
-# not secured
-/store
+# env
+.env
 
 # misc
 .DS_Store
