@@ -81,7 +81,7 @@ function buildJSON(data) {
 }
 
 let counter = 0;
-const job = schedule.scheduleJob("*/1 * * * *", function () {
+const job = schedule.scheduleJob("*/5 * * * *", function () {
   console.log("############################\nStarted counter at ===>", counter);
   initDataFormatter(targetIDS[counter])
     .then((data) => {
