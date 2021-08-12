@@ -1,22 +1,23 @@
 const fs = require("fs");
+const path = require("path");
 const axios = require("axios");
 const moment = require("moment");
 const schedule = require("node-schedule");
 const youtube = require("scrape-youtube").default;
+const { logsHandler } = require("../utils/commons")
 
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
 }
 
 const apiInfo = {
-  baseURL: "https://deezerdevs-deezer.p.rapidapi.com/playlist/",
   apiKey: process.env.API_KEY,
 };
 
 const request = axios.create({
   baseURL: "https://deezerdevs-deezer.p.rapidapi.com/",
-  timeout: 30000,
   headers: { "x-rapidapi-key": apiInfo.apiKey },
+  timeout: 30000,
 });
 
 const targetIDS = [
@@ -32,16 +33,10 @@ function getPlaylistData(playlistID) {
   return request.get("playlist/" + playlistID);
 }
 
-function getYoutubeData(title, artistName) {
-  return youtube.search(`${title} ${artistName}`);
-}
-
-async function initDataFormatter(playlistID) {
-  const playlist = await getPlaylistData(playlistID);
-
-  const tracks = await Promise.all(
-    playlist.data.tracks.data.map(async (track, index) => {
-      const res = await getYoutubeData(track.title, track.artist.name);
+function getYoutubeData(data) {
+  return Promise.all(
+    data.map(async (track, index) => {
+      const res = await youtube.search(track.title, track.artist.name);
       return {
         id: res.videos[0].id,
         rank: index + 1,
@@ -49,10 +44,17 @@ async function initDataFormatter(playlistID) {
         artist_name: track.artist.name,
         song_title: res.videos[0].title,
         song_link: res.videos[0].link,
+        preview: track.preview,
       };
     })
   );
-  const newData = {
+}
+
+async function initDataFormatter(playlistID) {
+  const playlist = await getPlaylistData(playlistID);
+  const tracks = await getYoutubeData(playlist.data.tracks.data);
+
+  return {
     id: playlist.data.id,
     title: playlist.data.title,
     picture: playlist.data.picture,
@@ -63,37 +65,56 @@ async function initDataFormatter(playlistID) {
     last_update: moment().format("MMM Do YYYY"),
     tracks,
   };
-
-  return newData;
 }
 
+const paths = {
+  logger: path.join(__dirname, `/factory/debug/error-log.txt`),
+  outputDir: path.join(__dirname, `/factory/output/`),
+};
+
 function buildJSON(data) {
-  let output = JSON.stringify(data);
-  fs.writeFile(
-    `./factory/output/${data.id}-test.json`,
-    output,
-    "utf8",
-    (err) => {
-      if (err) throw err;
-      console.log("##################\nCompleted JSON creation");
-    }
+  const output = JSON.stringify(data);
+  const filePath = `${paths.outputDir}${data.id}-test.json`;
+
+  fs.writeFile(filePath, output, "utf-8", (error) =>
+    logsHandler(error, "Completed JSON creation")
+  );
+}
+
+function outputErrors(error, i) {
+  const decorator = "#".repeat(10) + "\n";
+  const loggedMsg = `Error in playlist with index ${i}\n${error}\n`;
+  const template = `${decorator + loggedMsg + error + decorator}\n`;
+
+  fs.appendFile(paths.logger, template, "utf-8", (error) =>
+    logsHandler(
+      error,
+      "Error detected, check error-logs.txt for the complete log"
+    )
   );
 }
 
 let counter = 0;
+
 const job = schedule.scheduleJob("*/5 * * * *", function () {
-  console.log("############################\nStarted counter at ===>", counter);
+  logsHandler(null, `Started counter at ===> ${counter}`);
+
+  if (counter === 0 && fs.existsSync(paths.logger)) {
+    fs.unlink(paths.logger, (error) => logsHandler(error, "Old logs deleted"));
+  }
+
   initDataFormatter(targetIDS[counter])
     .then((data) => {
       buildJSON(data);
       counter++;
     })
-    .catch((err) => {
-      console.log("############################\nError ===>", err);
+    .catch((error) => {
+      outputErrors(error, counter);
       counter++;
     });
+
   if (counter === targetIDS.length - 1) {
-    console.log("############################\nDone ===> Good bye! ");
+    logsHandler(null, "Done, Good bye!");
     job.cancel();
   }
 });
@@ -101,19 +122,20 @@ const job = schedule.scheduleJob("*/5 * * * *", function () {
 
 /**
  * /////////////////////////////////////////////////////////////////////
- * 
- * @bug fix [ Socket hang up, Error-code: "ECONNRESET" ] 
- * @bug Missing playlists w/ following indexes : 17, 26, 28, 29, 30 
- * 
+ *
+ * @bug fix [ Socket hang up, Error-code: "ECONNRESET" ]
+ * @bug Missing playlists w/ following indexes : 17, 26, 28, 29, 30
+ *
  * /////////////////////////////////////////////////////////////////////
- * 
+ *
  * async function startTest() {
  *    const data = await initDataFormatter(targetIDS[0]);
  *    console.log(data);
  *    // buildJSON(data);
  * }
  *
- * startTest(); 
- * 
- *//////////////////////////////////////////////////////////////////////
+ * startTest();
+ *
+ */ /////////////////////////////////////////////////////////////////////
+
 

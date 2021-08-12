@@ -1,5 +1,7 @@
 const express = require("express");
-const { getYTID } = require("./factory/data-formatter");
+
+require("./factory/builder.js");
+require("./models/builder.js");
 
 const app = express();
 
