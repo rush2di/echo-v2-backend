@@ -1,0 +1,5 @@
+##############################
+Error in playlist with index 2
+TypeError: Cannot read property 'data' of undefined
+##############################
+

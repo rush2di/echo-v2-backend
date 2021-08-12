@@ -4,7 +4,7 @@ const axios = require("axios");
 const moment = require("moment");
 const schedule = require("node-schedule");
 const youtube = require("scrape-youtube").default;
-const { logsHandler } = require("../utils/commons")
+const { logsHandler } = require("../utils/commons");
 
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
@@ -62,19 +62,21 @@ async function initDataFormatter(playlistID) {
     picture_medium: playlist.data.picture_medium,
     picture_big: playlist.data.picture_big,
     picture_xl: playlist.data.picture_xl,
-    last_update: moment().format("MMM Do YYYY"),
+    last_update: moment().format("MMM Do YYYY").replace(" ", "-"),
     tracks,
   };
 }
 
 const paths = {
-  logger: path.join(__dirname, `/factory/debug/error-log.txt`),
-  outputDir: path.join(__dirname, `/factory/output/`),
+  logger: path.join(__dirname, `debug/error-log.txt`),
+  outputDir: path.join(__dirname, `output/`),
 };
 
 function buildJSON(data) {
   const output = JSON.stringify(data);
-  const filePath = `${paths.outputDir}${data.id}-test.json`;
+  const filePath = `${paths.outputDir}${moment()
+    .format("MMM Do YYYY")
+    .replace(/\s/g, "-")}-test.json`;
 
   fs.writeFile(filePath, output, "utf-8", (error) =>
     logsHandler(error, "Completed JSON creation")
@@ -82,9 +84,9 @@ function buildJSON(data) {
 }
 
 function outputErrors(error, i) {
-  const decorator = "#".repeat(10) + "\n";
+  const decorator = "#".repeat(30) + "\n";
   const loggedMsg = `Error in playlist with index ${i}\n${error}\n`;
-  const template = `${decorator + loggedMsg + error + decorator}\n`;
+  const template = `${decorator + loggedMsg + decorator}\n`;
 
   fs.appendFile(paths.logger, template, "utf-8", (error) =>
     logsHandler(
@@ -95,30 +97,33 @@ function outputErrors(error, i) {
 }
 
 let counter = 0;
+let dataArr = [];
 
-const job = schedule.scheduleJob("*/5 * * * *", function () {
+const job = schedule.scheduleJob(`*/5 * * * *`, function () {
   logsHandler(null, `Started counter at ===> ${counter}`);
 
   if (counter === 0 && fs.existsSync(paths.logger)) {
     fs.unlink(paths.logger, (error) => logsHandler(error, "Old logs deleted"));
   }
 
+  if (counter === targetIDS.length) {
+    logsHandler(null, "Done, Good bye!");
+    job.cancel();
+    counter = 0;
+    return;
+  }
+
   initDataFormatter(targetIDS[counter])
     .then((data) => {
-      buildJSON(data);
+      dataArr.push(data);
+      if (counter === targetIDS.length - 1) buildJSON(dataArr);
       counter++;
     })
     .catch((error) => {
       outputErrors(error, counter);
       counter++;
     });
-
-  if (counter === targetIDS.length - 1) {
-    logsHandler(null, "Done, Good bye!");
-    job.cancel();
-  }
 });
-
 
 /**
  * /////////////////////////////////////////////////////////////////////
@@ -136,6 +141,4 @@ const job = schedule.scheduleJob("*/5 * * * *", function () {
  *
  * startTest();
  *
- */ /////////////////////////////////////////////////////////////////////
-
-
+ *//////////////////////////////////////////////////////////////////////
