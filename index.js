@@ -1,7 +1,7 @@
 const express = require("express");
 
-require("./factory/builder.js");
-require("./models/builder.js");
+require("./tasks/worker.js");
+require("./models/factoryWorker.js");
 
 const app = express();
 

@@ -128,11 +128,6 @@ const job = schedule.scheduleJob(`*/5 * * * *`, function () {
 /**
  * /////////////////////////////////////////////////////////////////////
  *
- * @bug fix [ Socket hang up, Error-code: "ECONNRESET" ]
- * @bug Missing playlists w/ following indexes : 17, 26, 28, 29, 30
- *
- * /////////////////////////////////////////////////////////////////////
- *
  * async function startTest() {
  *    const data = await initDataFormatter(targetIDS[0]);
  *    console.log(data);
