@@ -17,9 +17,7 @@ function extractTracks(data) {
 
   for (let playlist in data) {
     data[playlist].tracks.forEach((track) => {
-      if (trackExists(tracksArray, track.song_link)) {
-        return;
-      } else {
+      if (!trackExists(tracksArray, track.song_link)) {
         const result = {
           id: counter,
           title: track.title,

@@ -1,12 +1,8 @@
-const mysql = require("mysql");
-const fs = require("fs");
-const path = require("path");
-const { logsHandler } = require("../utils/commons");
 const { extractTracks, removeInvalidChars } = require("../utils/tasksUtils");
+const { logsHandler } = require("../utils/commons");
+const mysql = require("mysql");
 
-if (process.env.NODE_ENV !== "production") {
-  require("dotenv").config();
-}
+if (process.env.NODE_ENV !== "production") require("dotenv").config();
 
 const db = mysql.createConnection({
   host: process.env.DP_HOST,
@@ -113,5 +109,5 @@ function updatePlaylistTracks(data) {
 module.exports = {
   updateAllTracks,
   updateAllPlaylists,
-  updatePlaylistTracks
+  updatePlaylistTracks,
 };

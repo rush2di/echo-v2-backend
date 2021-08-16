@@ -5,6 +5,7 @@ const moment = require("moment");
 const schedule = require("node-schedule");
 const youtube = require("scrape-youtube").default;
 const { logsHandler } = require("../utils/commons");
+const { updateAllTracks, updateAllPlaylists, updatePlaylistTracks } = require("../models/taskModel.js");
 
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
@@ -83,6 +84,12 @@ function buildJSON(data) {
   );
 }
 
+function updateDB(data) {
+  updateAllTracks(data);
+  updateAllPlaylists(data);
+  updatePlaylistTracks(data);
+}
+
 function outputErrors(error, i) {
   const decorator = "#".repeat(30) + "\n";
   const loggedMsg = `Error in playlist with index ${i}\n${error}\n`;
@@ -96,44 +103,31 @@ function outputErrors(error, i) {
   );
 }
 
-let counter = 0;
-let dataArr = [];
+// let counter = 0;
+// let dataArr = [];
 
-const job = schedule.scheduleJob(`*/5 * * * *`, function () {
-  logsHandler(null, `Started counter at ===> ${counter}`);
+// const job = schedule.scheduleJob(`*/5 * * * *`, function () {
+//   logsHandler(null, `Started counter at ===> ${counter}`);
 
-  if (counter === 0 && fs.existsSync(paths.logger)) {
-    fs.unlink(paths.logger, (error) => logsHandler(error, "Old logs deleted"));
-  }
+//   if (counter === 0 && fs.existsSync(paths.logger)) {
+//     fs.unlink(paths.logger, (error) => logsHandler(error, "Old logs deleted"));
+//   }
 
-  if (counter === targetIDS.length) {
-    logsHandler(null, "Done, Good bye!");
-    job.cancel();
-    counter = 0;
-    return;
-  }
+//   if (counter === targetIDS.length) {
+//     logsHandler(null, "Done, Good bye!");
+//     job.cancel();
+//     counter = 0;
+//     return;
+//   }
 
-  initDataFormatter(targetIDS[counter])
-    .then((data) => {
-      dataArr.push(data);
-      if (counter === targetIDS.length - 1) buildJSON(dataArr);
-      counter++;
-    })
-    .catch((error) => {
-      outputErrors(error, counter);
-      counter++;
-    });
-});
-
-/**
- * /////////////////////////////////////////////////////////////////////
- *
- * async function startTest() {
- *    const data = await initDataFormatter(targetIDS[0]);
- *    console.log(data);
- *    // buildJSON(data);
- * }
- *
- * startTest();
- *
- *//////////////////////////////////////////////////////////////////////
+//   initDataFormatter(targetIDS[counter])
+//     .then((data) => {
+//       dataArr.push(data);
+//       if (counter === targetIDS.length - 1) updateDB(dataArr);
+//       counter++;
+//     })
+//     .catch((error) => {
+//       outputErrors(error, counter);
+//       counter++;
+//     });
+// });
