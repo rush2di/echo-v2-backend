@@ -4,5 +4,5 @@ function logsHandler(error, message) {
 }
 
 module.exports = {
-    logsHandler
+    logsHandler,
 }
