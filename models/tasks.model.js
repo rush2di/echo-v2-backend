@@ -1,16 +1,14 @@
-const { extractTracks, removeInvalidChars } = require("../utils/tasksUtils");
+const db = require("../config/database.config");
 const { logsHandler } = require("../utils/commons");
-const mysql = require("mysql");
+const { extractTracks, removeInvalidChars } = require("../utils/tasksUtils");
 
 if (process.env.NODE_ENV !== "production") require("dotenv").config();
 
-const db = mysql.createConnection({
-  host: process.env.DP_HOST,
-  user: process.env.DP_USERNAME,
-  password: process.env.DP_PASSWORD,
-  database: process.env.DP_NAME,
-  charset: "utf8_general_ci",
-});
+const taksModels = {
+  updateAllTracks,
+  updateAllPlaylists,
+  updatePlaylistTracks,
+};
 
 function updateAllTracks(data) {
   let counter = 0;
@@ -106,8 +104,4 @@ function updatePlaylistTracks(data) {
   }
 }
 
-module.exports = {
-  updateAllTracks,
-  updateAllPlaylists,
-  updatePlaylistTracks,
-};
+module.exports = taksModels;
