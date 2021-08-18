@@ -86,7 +86,6 @@ function buildJSON(data) {
 
 function updateDB(data) {
   updateAllTracks(data);
-  updateAllPlaylists(data);
   updatePlaylistTracks(data);
 }
 

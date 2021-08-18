@@ -9,7 +9,10 @@ const sequelize = new Sequelize({
   password: process.env.DP_PASSWORD,
   database: process.env.DP_NAME,
   dialect: "mysql",
+  define: {
+    charset: 'utf8',
+    collate: 'utf8_general_ci'
+  },
 })
 
 module.exports = sequelize;
-global.sequelize = sequelize;

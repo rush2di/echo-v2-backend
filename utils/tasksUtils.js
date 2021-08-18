@@ -34,7 +34,43 @@ function extractTracks(data) {
   return tracksArray;
 }
 
+function tracksData(data) {
+  const formatedData = [];
+  const excludedTracks = [];
+  const tracksArray = extractTracks(data);
+
+  tracksArray.forEach( ({ title, artist_name, yt_title, yt_link, preview }) => {
+    if (!excludedTracks.includes(yt_link)) {
+      formatedData.push({
+        title: removeInvalidChars(title),
+        artist_name: removeInvalidChars(artist_name),
+        yt_title: removeInvalidChars(yt_title),
+        yt_link,
+        preview,
+      });
+    }
+    excludedTracks.push(yt_link);
+  })
+  return formatedData;
+}
+
+function playlistTracksData(data) {
+  const formatedData = [];
+  const refrence = extractTracks(data);
+
+  data.forEach((playlist) => {
+    const schema = playlist.tracks.map(({ song_link }, rank) => ({
+      playlist_key: playlist.id,
+      track_id: refrence.find((ref) => ref.yt_link === song_link).id + 1, // + 1 should be removed after
+      rank: rank + 1,
+    }));
+    formatedData.push(...schema);
+  });
+
+  return formatedData;
+}
+
 module.exports = {
-  extractTracks,
-  removeInvalidChars,
+  tracksData,
+  playlistTracksData
 };
