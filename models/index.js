@@ -1,26 +1,15 @@
-const fs = require("fs");
-const path = require("path");
-const Sequelize = require("sequelize");
-const basename = path.basename(__filename);
+const { Sequelize } = require("sequelize");
 const sequelize = require("../config/database.config");
-const db = {};
 
-fs.readdirSync(__dirname)
-  .filter((file) => {
-    return (
-      /^((?!task).)*$/g.test(file) &&
-      file.indexOf(".") !== 0 &&
-      file !== basename &&
-      file.slice(-9) === ".model.js"
-    );
-  })
-  .forEach((file) => {
-    const model = require(path.join(__dirname, file))(
-      sequelize,
-      Sequelize.DataTypes
-    );
-    db[model.name] = model;
-  });
+const Track = require("./track.model");
+const Playlist = require("./playlist.model");
+const PlaylistTracks = require("./playlistTracks.model");
+
+const db = {
+  Track: Track,
+  Playlist: Playlist,
+  PlaylistTracks: PlaylistTracks,
+};
 
 Object.keys(db).forEach((modelName) => {
   if (db[modelName].associate) {
@@ -31,19 +20,19 @@ Object.keys(db).forEach((modelName) => {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
+module.exports = db;
+
+// const data = require("../tasks/output/Aug-13th-2021-test.json");
+// const testt = require("./tasks.model");
+
 async function test() {
   try {
     await sequelize.authenticate();
-    const playlistTracks = await db.playlist_tracks.findAll({
-      where: {
-        playlist_key: "3155776842",
-      }
-    });    
-    console.log("All tracks:", JSON.stringify(playlistTracks, null, 2));
+    // await testt.test(data);
     console.log("Connection has been established successfully.");
   } catch (error) {
     console.error("Unable to connect to the database:", error);
   }
 }
+test();
 
-module.exports = {db, test};

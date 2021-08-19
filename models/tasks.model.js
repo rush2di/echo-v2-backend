@@ -1,39 +1,46 @@
-const db = require("../models/index");
+const db = require("./index");
 const { logsHandler } = require("../utils/commons");
 const { tracksData, playlistTracksData } = require("../utils/tasksUtils");
-
-if (process.env.NODE_ENV !== "production") require("dotenv").config();
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function updateAllTracks(data) {
+  const dataArr = tracksData(data)
   try {
-    await db.track.drop();
+    await db.Track.drop();
     await db.sequelize.sync();
-    await db.track.bulkCreate(tracksData(data));
+    await db.Track.bulkCreate(dataArr, { individualHooks: true });
   } catch (error) {
     logsHandler(error, "Error detected while updating tracks");
   } finally {
-    logsHandler(error, "updateAllTracks success");
+    logsHandler(null, "updateAllTracks success");
     return;
   }
 }
 
 async function updatePlaylistTracks(data) {
+  const dataArr = playlistTracksData(data)
   try {
-    await db.playlist_tracks.drop();
+    await db.PlaylistTracks.drop();
     await db.sequelize.sync();
-    await db.playlist_tracks.bulkCreate(playlistTracksData(data));
+    await db.PlaylistTracks.bulkCreate(dataArr, { individualHooks: true });
   } catch (error) {
     logsHandler(error, "Error detected while updating playlist tracks");
   } finally {
-    logsHandler(error, "updatePlaylistTracks success");
+    logsHandler(null, "updatePlaylistTracks success");
     return;
   }
+}
+
+
+async function test(data) {
+  await updateAllTracks(data);
+  await updatePlaylistTracks(data);
 }
 
 module.exports = {
   updateAllTracks,
   updatePlaylistTracks,
+  test
 };
