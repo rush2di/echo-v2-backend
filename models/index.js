@@ -25,14 +25,14 @@ module.exports = db;
 // const data = require("../tasks/output/Aug-13th-2021-test.json");
 // const testt = require("./tasks.model");
 
-async function test() {
-  try {
-    await sequelize.authenticate();
-    // await testt.test(data);
-    console.log("Connection has been established successfully.");
-  } catch (error) {
-    console.error("Unable to connect to the database:", error);
-  }
-}
-test();
+// async function test() {
+//   try {
+//     await sequelize.authenticate();
+//     // await testt.test(data);
+//     console.log("Connection has been established successfully.");
+//   } catch (error) {
+//     console.error("Unable to connect to the database:", error);
+//   }
+// }
+// test();
 

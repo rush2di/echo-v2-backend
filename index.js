@@ -1,29 +1,26 @@
 const cors = require("cors");
 const dotenv = require("dotenv");
 const express = require("express");
-// const apiRoutes = require("./routes/api.routes.js");
 
-dotenv.config()
-require('./config/database.config')
-
-require("./models/") 
+dotenv.config();
+require("./config/database.config");
 
 const app = express();
+
+const db = require("./models/");
+db.sequelize.sync()
+
+const apiRoutes = require("./routes/api.routes");
 
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-
-/* 
-app.get("/", (req, res) => {
-  res.send("hello world");
+app.use((req, res, next) => {
+  console.log([req.url,req.method])
+  next();
 });
 
-app.get("/playlists/:id", (req, res) => {
-  console.log(req.query);
-}); */
-
-// app.use("/api", apiRoutes)
+app.use("/api", apiRoutes);
 
 const port = process.env.PORT || 3000;
 app.listen(port);

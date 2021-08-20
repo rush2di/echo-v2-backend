@@ -1,6 +1,7 @@
 const sequelize = require("../config/database.config");
 const { DataTypes } = require("sequelize");
-const Playlist = require("./playlist.model")
+const Playlist = require("./playlist.model");
+const Track = require("./track.model");
 
 const PlaylistTracks = sequelize.define(
   "playlist_tracks",
@@ -14,10 +15,18 @@ const PlaylistTracks = sequelize.define(
     playlist_key: {
       type: DataTypes.STRING(255),
       allowNull: true,
+      // references: {
+      //   model: Playlist,
+      //   key: "playlist_key",
+      // },
     },
     track_id: {
       type: DataTypes.INTEGER,
       allowNull: true,
+      // references: {
+      //   model: Track,
+      //   key: "id",
+      // },
     },
     rank: {
       type: DataTypes.INTEGER,
@@ -49,4 +58,7 @@ const PlaylistTracks = sequelize.define(
   }
 );
 
-module.exports = PlaylistTracks
+// PlaylistTracks.hasMany(Playlist, { foreignKey: 'idClient', foreignKeyConstraint: true })
+// PlaylistTracks.hasMany(Track)
+
+module.exports = PlaylistTracks;

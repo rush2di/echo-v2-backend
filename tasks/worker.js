@@ -5,7 +5,7 @@ const moment = require("moment");
 const schedule = require("node-schedule");
 const youtube = require("scrape-youtube").default;
 const { logsHandler } = require("../utils/commons");
-const { updateAllTracks, updateAllPlaylists, updatePlaylistTracks } = require("../models/taskModel.js");
+const { updateAllTracks, updatePlaylistTracks } = require("../controllers/tasks.controller");
 
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();

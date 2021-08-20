@@ -1,4 +1,4 @@
-const db = require("./index");
+const db = require("../models/index");
 const { logsHandler } = require("../utils/commons");
 const { tracksData, playlistTracksData } = require("../utils/tasksUtils");
 
@@ -33,14 +33,7 @@ async function updatePlaylistTracks(data) {
   }
 }
 
-
-async function test(data) {
-  await updateAllTracks(data);
-  await updatePlaylistTracks(data);
-}
-
 module.exports = {
   updateAllTracks,
-  updatePlaylistTracks,
-  test
+  updatePlaylistTracks
 };
