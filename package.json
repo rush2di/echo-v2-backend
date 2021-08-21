@@ -20,7 +20,8 @@
     "node-schedule": "^2.0.0",
     "scrape-youtube": "^2.1.9",
     "sequelize": "^6.6.5",
-    "sequelize-cli": "^6.2.0"
+    "sequelize-cli": "^6.2.0",
+    "yt-mp3-dl": "^1.0.2"
   },
   "devDependencies": {
     "nodemon": "^2.0.12"

@@ -5,10 +5,22 @@ const Track = require("./track.model");
 const Playlist = require("./playlist.model");
 const PlaylistTracks = require("./playlistTracks.model");
 
+Track.belongsToMany(Playlist, {
+  through: "playlist_tracks",
+  as: "playlists",
+  foreignKey: "track_id",
+});
+
+Playlist.belongsToMany(Track, {
+  through: "playlist_tracks",
+  as: "tracks",
+  foreignKey: "playlist_key",
+});
+
 const db = {
   Track: Track,
   Playlist: Playlist,
-  PlaylistTracks: PlaylistTracks,
+  PlaylistTracks: PlaylistTracks
 };
 
 Object.keys(db).forEach((modelName) => {
@@ -21,18 +33,3 @@ db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
 module.exports = db;
-
-// const data = require("../tasks/output/Aug-13th-2021-test.json");
-// const testt = require("./tasks.model");
-
-// async function test() {
-//   try {
-//     await sequelize.authenticate();
-//     // await testt.test(data);
-//     console.log("Connection has been established successfully.");
-//   } catch (error) {
-//     console.error("Unable to connect to the database:", error);
-//   }
-// }
-// test();
-

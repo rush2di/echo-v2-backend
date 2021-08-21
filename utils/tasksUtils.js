@@ -58,9 +58,9 @@ function playlistTracksData(data) {
   const formatedData = [];
   const refrence = extractTracks(data);
 
-  data.forEach((playlist) => {
+  data.forEach((playlist, index) => {
     const schema = playlist.tracks.map(({ song_link }, rank) => ({
-      playlist_key: playlist.id,
+      playlist_key: index + 1,
       track_id: refrence.find((ref) => ref.yt_link === song_link).id + 1, // + 1 should be removed after
       rank: rank + 1,
     }));
