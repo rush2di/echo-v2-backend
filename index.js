@@ -3,11 +3,12 @@ const dotenv = require("dotenv");
 const express = require("express");
 
 dotenv.config();
+
 require("./config/database.config");
 
 const app = express();
-
 const db = require("./models/");
+
 db.sequelize.sync()
 
 const apiRoutes = require("./routes/api.routes");

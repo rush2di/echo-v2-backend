@@ -9,6 +9,9 @@ const PlaylistTracks = sequelize.define(
       allowNull: true,
     }
   },
+  {
+    timestamps: false
+  }
 );
 
 module.exports = PlaylistTracks;
