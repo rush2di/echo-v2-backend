@@ -17,11 +17,7 @@
     "express": "^4.17.1",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
-    "mysql2": "^2.3.0",
     "node-schedule": "^2.0.0",
-    "scrape-youtube": "^2.1.9",
-    "sequelize": "^6.6.5",
-    "sequelize-cli": "^6.2.0",
     "yt-mp3-dl": "^1.0.2"
   },
   "devDependencies": {

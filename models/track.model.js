@@ -1,50 +1,12 @@
-const sequelize = require("../config/database.config");
-const { DataTypes } = require("sequelize");
-
-const Track = sequelize.define(
-  "track",
-  {
-    id: {
-      autoIncrement: true,
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      primaryKey: true,
-    },
-    title: {
-      type: DataTypes.STRING(255),
-      allowNull: false,
-    },
-    artist_name: {
-      type: DataTypes.STRING(255),
-      allowNull: false,
-    },
-    yt_title: {
-      type: DataTypes.STRING(255),
-      allowNull: false,
-    },
-    yt_link: {
-      type: DataTypes.STRING(255),
-      allowNull: false,
-    },
-    preview: {
-      type: DataTypes.STRING(255),
-      allowNull: false,
-    },
-  },
-  {
-    sequelize,
-    tableName: "track",
-    timestamps: false,
-    indexes: [
-      {
-        name: "PRIMARY",
-        unique: true,
-        using: "BTREE",
-        fields: [{ name: "id" }],
-      },
-    ],
+class Track {
+  constructor(id, title, artist_name, yt_title, yt_link, preview) {
+    this.id = id;
+    this.title = title;
+    this.artist_name = artist_name;
+    this.yt_title = yt_title;
+    this.yt_link = yt_link;
+    this.preview = preview;
   }
-);
+}
 
-
-module.exports= Track
+module.exports = { Track };
