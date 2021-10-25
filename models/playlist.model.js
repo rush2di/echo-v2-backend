@@ -8,7 +8,8 @@ class Playlist {
     picture_medium,
     picture_big,
     picture_xl,
-    playlist
+    last_update,
+    tracks
   ) {
     this.id = id;
     this.playlist_key = playlist_key;
@@ -18,7 +19,8 @@ class Playlist {
     this.picture_medium = picture_medium;
     this.picture_big = picture_big;
     this.picture_xl = picture_xl;
-    this.playlist = playlist;
+    this.last_update = last_update;
+    this.tracks = tracks;
   }
 }
 

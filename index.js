@@ -7,9 +7,6 @@ dotenv.config();
 require("./config/database.config");
 
 const app = express();
-const db = require("./models/");
-
-db.sequelize.sync()
 
 const apiRoutes = require("./routes/api.routes");
 
@@ -17,7 +14,7 @@ app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use((req, res, next) => {
-  console.log([req.url,req.method])
+  console.log([req.url, req.method]);
   next();
 });
 

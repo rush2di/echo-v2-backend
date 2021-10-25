@@ -12,12 +12,14 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.21.1",
+    "cloudinary-build-url": "^0.2.1",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
     "node-schedule": "^2.0.0",
+    "scrape-youtube": "^2.1.9",
     "yt-mp3-dl": "^1.0.2"
   },
   "devDependencies": {
