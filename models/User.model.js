@@ -1,25 +1,25 @@
-class Playlist {
+class User {
   constructor(
     id,
-    title,
+    user_firstName,
+    user_lastName,
     picture,
     picture_small,
     picture_medium,
     picture_big,
     picture_xl,
-    last_update,
-    tracks
+    saved_tracks
   ) {
     this.id = id;
-    this.title = title;
+    this.user_firstName = user_firstName;
+    this.user_lastName = user_lastName;
     this.picture = picture;
     this.picture_small = picture_small;
     this.picture_medium = picture_medium;
     this.picture_big = picture_big;
     this.picture_xl = picture_xl;
-    this.last_update = last_update;
-    this.tracks = tracks;
+    this.saved_tracks = saved_tracks;
   }
 }
 
-module.exports = { Playlist };
+module.exports = { User };

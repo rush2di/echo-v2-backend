@@ -1,35 +1,10 @@
-const { Sequelize } = require("sequelize");
-const sequelize = require("../config/database.config");
+const db = require("../config/database.config");
 
-const Track = require("./track.model");
-const Playlist = require("./playlist.model");
-const PlaylistTracks = require("./playlistTracks.model");
+const { Playlist } = require("./Playlist.model");
+const { Track } = require("./Track.model");
+const { User } = require("./User.model");
 
-Track.belongsToMany(Playlist, {
-  through: "playlist_tracks",
-  as: "playlists",
-  foreignKey: "track_id",
-});
+const playlistsDB = db.collection("playlists");
+const usersDB = db.collection("users");
 
-Playlist.belongsToMany(Track, {
-  through: "playlist_tracks",
-  as: "tracks",
-  foreignKey: "playlist_key",
-});
-
-const db = {
-  Track: Track,
-  Playlist: Playlist,
-  PlaylistTracks: PlaylistTracks
-};
-
-Object.keys(db).forEach((modelName) => {
-  if (db[modelName].associate) {
-    db[modelName].associate(db);
-  }
-});
-
-db.sequelize = sequelize;
-db.Sequelize = Sequelize;
-
-module.exports = db;
+module.exports = { Track, Playlist, User, playlistsDB, usersDB };

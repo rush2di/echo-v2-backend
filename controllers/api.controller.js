@@ -1,56 +1,48 @@
-const db = require("../models/");
-const ytdl = require('yt-mp3-dl')
+const ytdl = require("yt-mp3-dl");
+const { playlistsDB } = require("../models");
 
-function api_playlists_get(req, res) {
-  db.Playlist.findAll({
-    attributes: { exclude: ["createdAt", "updatedAt"] },
-  })
-    .then((result) => {
-      res.json(result);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-}
-
-function api_playlistDetails(req, res) {
-  const playlistID = req.params.id;
-
-  db.Playlist.findOne({
-    where: {
-      playlist_key: playlistID,
-    },
-    attributes: { exclude: ["createdAt", "updatedAt"] },
-    include: [
-      {
-        model: db.Track,
-        as: "tracks",
-        attributes: [
-          "id",
-          "title",
-          "artist_name",
-          "yt_title",
-          "yt_link",
-          "preview",
-        ],
-      },
-    ],
-  })
-    .then((result) => {
-      res.json(result);
+function apiPlaylistsGet(req, res) {
+  playlistsDB
+    .get()
+    .then((snapshot) => {
+      if (snapshot.empty) {
+        throw new Error("no data available currently");
+      } else {
+        const data = snapshot.docs.map((doc) => doc.data());
+        res.status(200).json(data);
+      }
     })
     .catch((error) => {
-      console.log(error);
+      res.status(404).json({ message: error.message || error });
     });
 }
 
-function api_trackDownload(req, res) {
+function apiPlaylistDetailsGet(req, res) {
+  playlistsDB
+    .doc(req.params.id)
+    .get()
+    .then((doc) => {
+      if (!doc.exists) {
+        res.status(404).json({ error: "No playlist exists found" });
+      } else {
+        res.status(200).json(doc.data());
+      }
+    })
+    .catch((error) => {
+      res.status(404).json({ message: error.message || error });
+    });
+}
+
+function apiTrackDownloadGet(req, res) {
   const trackID = req.params.id;
-  ytdl(trackID).then(r => res.json(r))
+
+  ytdl(trackID).then((downloads) => {
+    res.status(200).redirect(downloads[0].url);
+  });
 }
 
 module.exports = {
-  api_playlists_get,
-  api_playlistDetails,
-  api_trackDownload
+  apiTrackDownloadGet,
+  apiPlaylistDetailsGet,
+  apiPlaylistsGet,
 };
