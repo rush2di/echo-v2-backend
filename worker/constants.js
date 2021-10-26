@@ -4,7 +4,7 @@ const axios = require("axios");
 
 const CLOUDINARY_CLOUDNAME = process.env.CLAUDINARY_CLOUDNAME;
 const CLOUDINARY_EFFECT = "blur:1000";
-const CLOUDINARY_QUALITY = 75;
+const CLOUDINARY_QUALITY = 95;
 
 const CROP_TYPE = "fill";
 const ASPECT_RATIO_SMALL = 65;

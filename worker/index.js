@@ -3,55 +3,25 @@ const path = require("path");
 const moment = require("moment");
 const schedule = require("node-schedule");
 const { logsHandler } = require("../utils/commons");
-const { Playlist } = require("../models");
+const { Playlist, playlistsDB } = require("../models");
 
 const workerConstants = require("./constants").worker;
-const cloudinaryConstants = require("./constants").cloudinary;
 
 const {
-  getCloudinaryImageID,
-  setCloudinaryImage,
   buildDebugTemplate,
   getPlaylistData,
   getYoutubeData,
-  setPlaylistsDB,
+  assetsGenerator,
 } = require("./utils");
 
 const { targetIDs } = workerConstants;
-const { cloudinaryResizeParams, cloudinaryEffectsType } = cloudinaryConstants;
 
-async function initDataFormatter(playlistID) {
-  const playlist = await getPlaylistData(playlistID);
-  const tracks = await getYoutubeData(playlist.data.tracks.data);
+function generatFormatedData(playlist, tracks) {
   const timestamp = moment().format("MMM Do YYYY").replace(" ", "-");
+  const { picture, picture_small, picture_medium, picture_big, picture_xl } =
+    assetsGenerator(playlist.data.title);
 
-  const picture = setCloudinaryImage({
-    imageID: getCloudinaryImageID(playlist.data.picture),
-    resize: cloudinaryResizeParams.medium,
-  });
-
-  const picture_small = setCloudinaryImage({
-    imageID: getCloudinaryImageID(playlist.data.picture_small),
-    resize: cloudinaryResizeParams.small,
-    effect: cloudinaryEffectsType.blur,
-  });
-
-  const picture_medium = setCloudinaryImage({
-    imageID: getCloudinaryImageID(playlist.data.picture_medium),
-    resize: cloudinaryResizeParams.medium,
-  });
-
-  const picture_big = setCloudinaryImage({
-    imageID: getCloudinaryImageID(playlist.data.picture_big),
-    resize: cloudinaryResizeParams.big,
-  });
-
-  const picture_xl = setCloudinaryImage({
-    imageID: getCloudinaryImageID(playlist.data.picture_xl),
-    resize: cloudinaryResizeParams.xl,
-  });
-
-  return new Playlist(
+  const formatedData = new Playlist(
     playlist.data.id,
     playlist.data.title,
     picture,
@@ -62,7 +32,26 @@ async function initDataFormatter(playlistID) {
     timestamp,
     tracks
   );
+
+  return { ...formatedData };
 }
+
+async function initDatabaseUpdate(playlistID) {
+  try {
+    const playlist = await getPlaylistData(playlistID);
+    const tracks = await getYoutubeData(playlist.data.tracks.data);
+    const formatedData = generatFormatedData(playlist, tracks);
+
+    await playlistsDB.doc(`${formatedData.id}`).set(formatedData);
+
+    return formatedData;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 const paths = {
   logger: path.join(__dirname, `debug/error-log.txt`),
@@ -80,10 +69,6 @@ function buildJSON(data) {
   );
 }
 
-async function updateDB(data) {
-  setPlaylistsDB(data.id, data);
-}
-
 function outputErrors(error, index) {
   const template = buildDebugTemplate(error, index);
 
@@ -95,31 +80,32 @@ function outputErrors(error, index) {
   );
 }
 
-let counter = 0;
-let dataArr = [];
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-const job = schedule.scheduleJob(`*/5 * * * *`, function () {
-  logsHandler(null, `Started counter at ===> ${counter}`);
+// let counter = 0;
+// let dataArr = [];
 
-  if (counter === 0 && fs.existsSync(paths.logger)) {
-    fs.unlink(paths.logger, (error) => logsHandler(error, "Old logs deleted"));
-  }
+// const job = schedule.scheduleJob(`*/3 * * * *`, function () {
+//   logsHandler(null, `Started counter at ===> ${counter}`);
 
-  if (counter === targetIDs.length) {
-    logsHandler(null, "Done, Good bye!");
-    job.cancel();
-    counter = 0;
-    return;
-  }
+//   if (counter === 0 && fs.existsSync(paths.logger)) {
+//     fs.unlink(paths.logger, (error) => logsHandler(error, "Old logs deleted"));
+//   }
 
-  initDataFormatter(targetIDs[counter])
-    .then((data) => {
-      dataArr.push(data);
-      if (counter === targetIDs.length - 1) updateDB(dataArr);
-      counter++;
-    })
-    .catch((error) => {
-      outputErrors(error, counter);
-      counter++;
-    });
-});
+//   if (counter === targetIDs.length) {
+//     logsHandler(null, "Done, Good bye!");
+//     job.cancel();
+//     counter = 0;
+//     return;
+//   }
+
+//   initDatabaseUpdate(targetIDs[counter])
+//     .then((data) => {
+//       dataArr.push(data);
+//       counter++;
+//     })
+//     .catch((error) => {
+//       outputErrors(error, counter);
+//     });
+// });

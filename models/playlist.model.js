@@ -1,7 +1,6 @@
 class Playlist {
   constructor(
     id,
-    playlist_key,
     title,
     picture,
     picture_small,
@@ -12,7 +11,6 @@ class Playlist {
     tracks
   ) {
     this.id = id;
-    this.playlist_key = playlist_key;
     this.title = title;
     this.picture = picture;
     this.picture_small = picture_small;
