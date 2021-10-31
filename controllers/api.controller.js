@@ -37,7 +37,7 @@ function apiTrackDownloadGet(req, res) {
   const trackID = req.params.id;
 
   ytdl(trackID).then((downloads) => {
-    res.status(200).redirect(downloads[0].url);
+    res.redirect(downloads[0].url);
   });
 }
 

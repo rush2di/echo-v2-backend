@@ -13,12 +13,12 @@ const apiRoutes = require("./routes/api.routes");
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use((req, res, next) => {
+app.use((req, _, next) => {
   console.log([req.url, req.method]);
   next();
 });
 
 app.use("/api", apiRoutes);
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8080;
 app.listen(port);
