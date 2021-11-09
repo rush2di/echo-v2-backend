@@ -72,6 +72,10 @@ function getYoutubeData(data) {
       const yt_title = removeInvalidChars(res.videos[0].title);
       const yt_link = res.videos[0].link.replace("https://youtu.be/", "");
       const preview = track.preview;
+      const cover = track.album.cover;
+      const coverSmall = track.album.cover_small;
+      const coverMedium = track.album.cover_medium;
+      const coverBig = track.album.cover_big;
 
       const mutatedData = new Track(
         id,
@@ -80,7 +84,11 @@ function getYoutubeData(data) {
         artist_name,
         yt_title,
         yt_link,
-        preview
+        preview,
+        cover,
+        coverSmall,
+        coverMedium,
+        coverBig
       );
 
       return { ...mutatedData };
