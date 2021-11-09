@@ -1,4 +1,4 @@
-const db = require("../config/database.config");
+const { db } = require("../config/database.config");
 
 const { Playlist } = require("./Playlist.model");
 const { Track } = require("./Track.model");

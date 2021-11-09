@@ -37,12 +37,25 @@ function apiTrackDownloadGet(req, res) {
   const trackID = req.params.id;
 
   ytdl(trackID).then((downloads) => {
-    res.redirect(downloads[0].url);
+    res.json(downloads[0]);
   });
+}
+
+function apiSourceDownloadGet(req, res) {
+  const trackID = req.params.id;
+
+  ytdl(trackID)
+    .then((downloads) => {
+      res.json(downloads);
+    })
+    .catch((err) => {
+      res.status(500).json({ error: err });
+    });
 }
 
 module.exports = {
   apiTrackDownloadGet,
   apiPlaylistDetailsGet,
   apiPlaylistsGet,
+  apiSourceDownloadGet,
 };

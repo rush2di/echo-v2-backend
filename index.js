@@ -9,16 +9,14 @@ require("./config/database.config");
 const app = express();
 
 const apiRoutes = require("./routes/api.routes");
+const usersRoutes = require("./routes/users.routes");
 
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use((req, _, next) => {
-  console.log([req.url, req.method]);
-  next();
-});
 
 app.use("/api", apiRoutes);
+app.use("/users", usersRoutes);
 
 const port = process.env.PORT || 8080;
 app.listen(port);

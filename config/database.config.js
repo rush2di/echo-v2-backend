@@ -2,6 +2,7 @@ if (process.env.NODE_ENV !== "production") require("dotenv").config();
 
 const { initializeApp, cert } = require("firebase-admin/app");
 const { getFirestore } = require("firebase-admin/firestore");
+const { getAuth } = require("firebase-admin/auth");
 
 initializeApp({
   credential: cert({
@@ -20,4 +21,4 @@ initializeApp({
 
 const db = getFirestore();
 
-module.exports = db;
+module.exports = { db };
