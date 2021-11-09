@@ -4,6 +4,7 @@ class Track {
     rank,
     title,
     artist_name,
+    artist_picture,
     yt_title,
     yt_link,
     preview,
@@ -16,6 +17,7 @@ class Track {
     this.rank = rank;
     this.title = title;
     this.artist_name = artist_name;
+    this.artist_picture = artist_picture;
     this.yt_title = yt_title;
     this.yt_link = yt_link;
     this.preview = preview;

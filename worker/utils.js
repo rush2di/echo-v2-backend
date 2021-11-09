@@ -69,6 +69,7 @@ function getYoutubeData(data) {
       const rank = index + 1;
       const title = removeInvalidChars(track.title);
       const artist_name = removeInvalidChars(track.artist.name);
+      const artist_picture = `https://api.deezer.com/artist/${track.artist.id}/image`;
       const yt_title = removeInvalidChars(res.videos[0].title);
       const yt_link = res.videos[0].link.replace("https://youtu.be/", "");
       const preview = track.preview;
@@ -82,6 +83,7 @@ function getYoutubeData(data) {
         rank,
         title,
         artist_name,
+        artist_picture,
         yt_title,
         yt_link,
         preview,
