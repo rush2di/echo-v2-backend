@@ -1,62 +1,59 @@
-const { usersDB, User } = require("../models");
+const { usersDB } = require("../models");
+const { userDataTemplate } = require("../utils/controllers");
+
+const USERDB_ERROR = "No data available currently";
 
 async function usersRegisterPost(req, res) {
-  const userSchema = new User(
-    req.body.uid,
-    req.body.fullname,
-    req.body.email,
-    `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${req.body.fullname.replace(
-      " ",
-      "+"
-    )}`,
-    [],
-    []
-  );
+  const userUID = req.body.uid;
+  const userData = userDataTemplate(req.body);
+
   try {
-    await usersDB.doc(`${req.body.uid}`).set({ ...userSchema });
-    const response = await usersDB.doc(`${req.body.uid}`).get();
-    if (!response.exists) {
-      throw new Error("no data available currently");
-    } else {
-      res.status(200).json(response.data());
-    }
+    await usersDB.doc(userUID).set(userData);
+    const snapshot = await usersDB.doc(userUID).get();
+
+    if (!snapshot.exists) throw new Error(USERDB_ERROR);
+
+    res.status(200).json(snapshot.data());
   } catch (error) {
     res.status(404).json({ message: error.message || error });
   }
 }
 
 async function userDataGet(req, res) {
+  const userUID = req.params.id;
+
   try {
-    const response = await usersDB.doc(`${req.params.id}`).get();
-    if (!response.exists) {
-      throw new Error("no data available currently");
-    } else {
-      res.status(200).json(response.data());
-    }
+    const response = await usersDB.doc(userUID).get();
+
+    if (!response.exists) throw new Error(USERDB_ERROR);
+
+    res.status(200).json(response.data());
   } catch (error) {
     res.status(404).json({ message: error.message || error });
   }
 }
 
 async function userAddLikesPost(req, res) {
+  const userUID = req.params.id;
+  const likedTracks = req.body.likedTracks;
+
   try {
-    await usersDB
-      .doc(`${req.body.id}`)
-      .update({ liked_tracks: req.body.likedTracks });
-    res.status(200);
+    await usersDB.doc(userUID).update({ liked_tracks: likedTracks });
+    res.sendStatus(200);
   } catch (err) {
-    res.status(404);
+    res.sendStatus(404);
   }
 }
 
 async function userAddDownloadsPost(req, res) {
+  const userUID = req.params.id;
+  const downloadedTracks = req.body.downloadedTracks;
+
   try {
-    await usersDB
-      .doc(`${req.body.id}`)
-      .update({ downladed_tracks: req.body.downladedTracks });
-    res.status(200);
+    await usersDB.doc(userUID).update({ downloaded_tracks: downloadedTracks });
+    res.sendStatus(200);
   } catch (err) {
-    res.status(404);
+    res.sendStatus(404);
   }
 }
 

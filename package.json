@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.21.1",
+    "chroma-js": "^2.1.2",
     "cloudinary-build-url": "^0.2.1",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",

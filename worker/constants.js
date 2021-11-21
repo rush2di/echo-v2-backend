@@ -42,7 +42,7 @@ const makeRequest = axios.create({
   timeout: 30000,
 });
 
-const targetIDs = process.env.APP_DATA_STREAMS.split(" ");
+const targetIDs = process.env.APP_DATA_STREAMS.trim().split(" ");
 
 module.exports = {
   cloudinary: {
