@@ -87,7 +87,7 @@ function outputErrors(error, index) {
 // let dataArr = [];
 
 // const job = schedule.scheduleJob(`*/3 * * * *`, function () {
-//   logsHandler(null, `Started counter at ===> ${counter}`);
+//   logsHandler(null, `Working on stream ${counter + 1}`);
 
 //   if (counter === 0 && fs.existsSync(paths.logger)) {
 //     fs.unlink(paths.logger, (error) => logsHandler(error, "Old logs deleted"));
@@ -102,6 +102,7 @@ function outputErrors(error, index) {
 
 //   initDatabaseUpdate(targetIDs[counter])
 //     .then((data) => {
+//       console.log({ data });
 //       dataArr.push(data);
 //       counter++;
 //     })

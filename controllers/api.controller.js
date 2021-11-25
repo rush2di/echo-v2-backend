@@ -1,12 +1,14 @@
 const ytdl = require("yt-mp3-dl");
 const { playlistsDB } = require("../models");
 
+const PLAYLISTDB_ERROR = "No playlist exists";
+
 function apiPlaylistsGet(req, res) {
   playlistsDB
     .get()
     .then((snapshot) => {
       if (snapshot.empty) {
-        throw new Error("no data available currently");
+        throw new Error(PLAYLISTDB_ERROR);
       } else {
         const data = snapshot.docs.map((doc) => doc.data());
         res.status(200).json(data);
@@ -23,7 +25,7 @@ function apiPlaylistDetailsGet(req, res) {
     .get()
     .then((doc) => {
       if (!doc.exists) {
-        res.status(404).json({ error: "No playlist exists found" });
+        res.status(404).json({ error: PLAYLISTDB_ERROR });
       } else {
         res.status(200).json(doc.data());
       }
