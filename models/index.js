@@ -1,7 +1,7 @@
 const { db } = require("../config/database.config");
 
-const { Playlist } = require("./Playlist.model");
-const { Track } = require("./Track.model");
+const { Playlist } = require("./playlist.model");
+const { Track } = require("./track.model");
 const { User } = require("./User.model");
 
 const playlistsDB = db.collection("playlists");
