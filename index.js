@@ -11,7 +11,7 @@ const app = express();
 const apiRoutes = require("./routes/api.routes");
 const usersRoutes = require("./routes/users.routes");
 
-app.use(cors());
+app.use(cors({ origin: "https://echoboard.netlify.app", optionsSuccessStatus: 200 }));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
