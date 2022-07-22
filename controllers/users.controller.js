@@ -6,6 +6,10 @@ const USERDB_ERROR = "No data available currently";
 async function usersRegisterPost(req, res) {
   const userUID = req.body.uid;
   const userData = userDataTemplate(req.body);
+  console.log(
+    "register post",
+    JSON.stringify({ userData, body: req.body }, null, 2)
+  );
 
   try {
     await usersDB.doc(userUID).set(userData);
@@ -20,6 +24,7 @@ async function usersRegisterPost(req, res) {
 }
 
 async function userDataGet(req, res) {
+  console.log("hello user");
   const userUID = req.params.id;
 
   try {

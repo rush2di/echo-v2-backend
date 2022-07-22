@@ -13,13 +13,14 @@ function generateHexColors() {
     .mode("lch")
     .colors(6);
 
-  const brightColor = colorPalette[0].hex();
-  const darkColor = colorPalette[MAX_COLORS - 1].hex();
+  const brightColor = colorPalette[0] || "#ffffff";
+  const darkColor = colorPalette[MAX_COLORS - 1] || "#000000";
 
   return [brightColor, darkColor];
 }
 
 function userDataTemplate(requestBody) {
+  console.log(JSON.stringify(requestBody, null, 2));
   const [textColor, bgColor] = generateHexColors();
   const paramName = requestBody.fullname.replace(" ", "+");
 
