@@ -1,4 +1,4 @@
-const youtube = require("scrape-youtube").default;
+const youtube = require("scrape-youtube");
 
 const { buildUrl } = require("cloudinary-build-url");
 const { playlistsDB, Track } = require("../models");

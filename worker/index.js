@@ -53,35 +53,35 @@ async function initDatabaseUpdate(playlistID) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-const paths = {
-  logger: path.join(__dirname, `debug/error-log.txt`),
-  outputDir: path.join(__dirname, `output/`),
-};
+// const paths = {
+//   logger: path.join(__dirname, `debug/error-log.txt`),
+//   outputDir: path.join(__dirname, `output/`),
+// };
 
-function buildJSON(data) {
-  const fileName = moment().format("MMM Do YYYY").replace(/\s/g, "-");
-  const filePath = `${paths.outputDir + fileName}-test.json`;
+// function buildJSON(data) {
+//   const fileName = moment().format("MMM Do YYYY").replace(/\s/g, "-");
+//   const filePath = `${paths.outputDir + fileName}-test.json`;
 
-  const output = JSON.stringify(data);
+//   const output = JSON.stringify(data);
 
-  fs.writeFile(filePath, output, "utf-8", (error) =>
-    logsHandler(error, "Completed JSON creation")
-  );
-}
+//   fs.writeFile(filePath, output, "utf-8", (error) =>
+//     logsHandler(error, "Completed JSON creation")
+//   );
+// }
 
-function outputErrors(error, index) {
-  const template = buildDebugTemplate(error, index);
+// function outputErrors(error, index) {
+//   const template = buildDebugTemplate(error, index);
 
-  fs.appendFile(paths.logger, template, "utf-8", (error) =>
-    logsHandler(
-      error,
-      "Error detected, check error-logs.txt for the complete log"
-    )
-  );
-}
+//   fs.appendFile(paths.logger, template, "utf-8", (error) =>
+//     logsHandler(
+//       error,
+//       "Error detected, check error-logs.txt for the complete log"
+//     )
+//   );
+// }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // let counter = 0;
 // let dataArr = [];

@@ -23,7 +23,7 @@
     "moment": "^2.29.1",
     "node-schedule": "^2.0.0",
     "scrape-youtube": "^2.1.9",
-    "yt-mp3-dl": "^1.0.2"
+    "yt-mp3-dl": "^1.0.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.12"

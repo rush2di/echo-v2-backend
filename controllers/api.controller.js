@@ -4,6 +4,7 @@ const { playlistsDB } = require("../models");
 const PLAYLISTDB_ERROR = "No playlist exists";
 
 function apiPlaylistsGet(req, res) {
+  console.log(req)
   playlistsDB
     .get()
     .then((snapshot) => {
@@ -11,6 +12,7 @@ function apiPlaylistsGet(req, res) {
         throw new Error(PLAYLISTDB_ERROR);
       } else {
         const data = snapshot.docs.map((doc) => doc.data());
+        console.log(JSON.stringify(data, null, 2))
         res.status(200).json(data);
       }
     })
@@ -20,6 +22,7 @@ function apiPlaylistsGet(req, res) {
 }
 
 function apiPlaylistDetailsGet(req, res) {
+  console.log(req)
   playlistsDB
     .doc(req.params.id)
     .get()
@@ -36,6 +39,7 @@ function apiPlaylistDetailsGet(req, res) {
 }
 
 function apiTrackDownloadGet(req, res) {
+  console.log(req)
   const trackID = req.params.id;
 
   ytdl(trackID).then((downloads) => {
@@ -44,6 +48,7 @@ function apiTrackDownloadGet(req, res) {
 }
 
 function apiSourceDownloadGet(req, res) {
+  console.log(req)
   const trackID = req.params.id;
 
   ytdl(trackID)
