@@ -8,9 +8,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "npx nodemon"
   },
-  "engines" : { 
-    "npm" : ">=8.0.0 <9.0.0",
-    "node" : ">=14.0.0 <17.0.0"
+  "engines": {
+    "npm": ">=8.0.0 <9.0.0",
+    "node": ">=14.0.0 <17.0.0"
   },
   "keywords": [],
   "author": "",
@@ -27,6 +27,7 @@
     "moment": "^2.29.1",
     "node-schedule": "^2.0.0",
     "scrape-youtube": "^2.1.9",
+    "youtube-to-mp3-poji": "^1.0.4",
     "yt-mp3-dl": "1.0.1"
   },
   "devDependencies": {

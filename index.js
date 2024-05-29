@@ -19,4 +19,5 @@ app.use("/api", apiRoutes);
 app.use("/users", usersRoutes);
 
 const port = process.env.PORT || 8080;
+console.log("on port: ", port);
 app.listen(port);
