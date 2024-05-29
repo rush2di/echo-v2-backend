@@ -1,4 +1,4 @@
-const ytdl = require("yt-mp3-dl");
+const poji_ytmp3 = require("youtube-to-mp3-poji");
 const { playlistsDB } = require("../models");
 
 const PLAYLISTDB_ERROR = "No playlist exists";
@@ -51,12 +51,14 @@ function apiSourceDownloadGet(req, res) {
   console.log(req)
   const trackID = req.params.id;
 
-  ytdl(trackID)
-    .then((downloads) => {
-      res.json(downloads);
+  poji_ytmp3("https://www.youtube.com/watch?v=" + trackID)
+    .then((data) => {
+      console.log({ data });
+      res.json(data.data);
     })
     .catch((err) => {
-      res.status(500).json({ error: err });
+      console.log({ err });
+      res.status(403);
     });
 }
 
