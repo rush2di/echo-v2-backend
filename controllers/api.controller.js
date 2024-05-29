@@ -47,11 +47,11 @@ function apiSourceDownloadGet(req, res) {
   const trackID = req.params.id;
 
   poji_ytmp3("https://www.youtube.com/watch?v=" + trackID)
-    .then((res) => {
-      res.json(res);
+    .then((data) => {
+      res.json(data.data);
     })
     .catch((err) => {
-      res.status(403).json({ error: err });
+      res.status(403).json({ message: err.message || err });
     });
 }
 
