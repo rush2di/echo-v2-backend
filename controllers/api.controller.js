@@ -48,10 +48,12 @@ function apiSourceDownloadGet(req, res) {
 
   poji_ytmp3("https://www.youtube.com/watch?v=" + trackID)
     .then((data) => {
+      console.log({ data });
       res.json(data.data);
     })
     .catch((err) => {
-      res.status(403).json({ message: err.message || err });
+      console.log({ err });
+      res.status(403);
     });
 }
 
